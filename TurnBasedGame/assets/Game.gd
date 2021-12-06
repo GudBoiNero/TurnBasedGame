@@ -44,7 +44,6 @@ var tile_grid = {
 
 var entity_grid = {
 	Vector2(-2,2): preload("res://assets/Player.tscn").instance(),
-	Vector2(-3,-1): Entity.new(),
 	Vector2(-2,0): Entity.new()
 }
 

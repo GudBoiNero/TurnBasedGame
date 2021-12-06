@@ -120,6 +120,7 @@ func determine_dir():
 	path.from = grid_pos
 	path.to = Game.player_pos
 	add_child(path)
+	
 	return path.return_path()
 	path.queue_free()
 
