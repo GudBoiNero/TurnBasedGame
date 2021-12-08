@@ -31,44 +31,6 @@ var d = RayCast2D.new()
 var l = RayCast2D.new()
 
 func _ready():
-	# Animation Setup
-#	add_child(anim)
-#	var idle_up = Animation.new()
-#	var idle_down = Animation.new()
-#	var idle_horizontal = Animation.new()
-#
-#	idle_up.add_track(0)
-#	idle_up.track_set_path(0, "sprite:frame")
-#	idle_up.track_insert_key(0,0,0)
-#	idle_up.track_insert_key(0,1,1)
-#	idle_up.track_insert_key(0,2,2)
-#	idle_up.track_insert_key(0,3,3)
-#	idle_up.track_insert_key(0,3.5,0)
-#	idle_up.loop = true
-#
-#	idle_down.add_track(0)
-#	idle_down.track_set_path(0, "sprite:frame")
-#	idle_down.track_insert_key(0,0,0)
-#	idle_down.track_insert_key(0,1,1)
-#	idle_down.track_insert_key(0,2,2)
-#	idle_down.track_insert_key(0,3,3)
-#	idle_down.track_insert_key(0,3.5,0)
-#	idle_down.loop = true
-#
-#	idle_horizontal.add_track(0)
-#	idle_horizontal.track_set_path(0, "sprite:frame")
-#	idle_horizontal.track_insert_key(0,0,0)
-#	idle_horizontal.track_insert_key(0,1,1)
-#	idle_horizontal.track_insert_key(0,2,2)
-#	idle_horizontal.track_insert_key(0,3,3)
-#	idle_horizontal.track_insert_key(0,3.5,0)
-#	idle_horizontal.loop = true
-#
-#	anim.add_animation(animations[0], idle_up)
-#	anim.add_animation(animations[1], idle_down)
-#	anim.add_animation(animations[2], idle_horizontal)
-	
-	# Sprite Setup
 	sprite.texture = _get_tex()
 	sprite.hframes = 12
 	sprite.position.y += -8
@@ -83,7 +45,8 @@ func _ready():
 	)
 
 func turn_ex():
-	move(determine_dir(), 1, false)
+	if determine_dir() != null:
+		move(determine_dir(), 1, false)
 
 func move(dir, length, tp):
 	if can_move(dir):
@@ -120,8 +83,8 @@ func determine_dir():
 	path.from = grid_pos
 	path.to = Game.player_pos
 	add_child(path)
-	
-	return path.return_path()
+	if path.return_path().size() != 0:
+		return path.return_path()[0]-grid_pos
 	path.queue_free()
 
 func _init_nodes():
@@ -167,8 +130,11 @@ func set_animations(dir:Vector2, state:bool):
 				sprite.scale.x = 1
 				facing = dir
 
-func is_stuck() -> bool:
-#	if Game.get_next(Vector2.UP, 0, grid_pos) and Game.get_next(Vector2.RIGHT, 0, grid_pos) and Game.get_next(Vector2.DOWN, 0, grid_pos) and Game.get_next(Vector2.LEFT, 0, grid_pos):
+func is_stuck() -> bool: 
+	# Checks if all possible directions are unavailable
+	# NOTE (12/7/2021 7:10 PM EST) : Currently planning on remaking this system since its four `if` statements over and over
+	# Definitely not efficient. Probably going to use a `for` loop
+
 	if Game.get_next(Vector2.UP, 0,grid_pos) or Game.get_next(Vector2.UP, 1,grid_pos) or !Game.get_next(Vector2.UP, 2,grid_pos):
 		if Game.get_next(Vector2.RIGHT, 0,grid_pos) or Game.get_next(Vector2.RIGHT, 1,grid_pos) or !Game.get_next(Vector2.RIGHT, 2,grid_pos):
 			if Game.get_next(Vector2.DOWN, 0,grid_pos) or Game.get_next(Vector2.DOWN, 1,grid_pos) or !Game.get_next(Vector2.DOWN, 2,grid_pos):

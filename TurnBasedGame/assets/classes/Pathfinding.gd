@@ -33,7 +33,7 @@ func return_path() -> Vector2:
 	var path = astar.get_point_path(id(from),id(to))
 	path.remove(0)
 	print(path)
-	return Vector2(0,0)
+	return path
 
 func is_valid_position(dir,pos) -> bool:
 	if !Game.get_next(dir,0,pos) and !Game.get_next(dir,1,pos) and Game.get_next(dir,2,pos):

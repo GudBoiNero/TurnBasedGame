@@ -17,39 +17,39 @@ var global_z_indexes = [
 
 var tile_size = 16
 var tile_grid = {
-	Vector2(0,0): Tile.new(),
-	Vector2(0,1): Tile.new(),
-	Vector2(0,2): Tile.new(),
-	Vector2(-1,2): Tile.new(),
-	Vector2(-2,2): Tile.new(),
-	Vector2(-3,0): Tile.new(),
-	Vector2(-1,0): Tile.new(),
-	Vector2(-2,1): Tile.new(),
-	Vector2(-2,0): Tile.new(),
-	Vector2(1,1): Tile.new(),
-	Vector2(2,1): Tile.new(), 
-	Vector2(-3,-1): Tile.new(),
-	Vector2(-3,-2): Tile.new(),
-	Vector2(-2,-2): Tile.new(),
-	Vector2(-1,-2): Tile.new(),
-	Vector2(-1,-1): Tile.new(),
-	Vector2(-4,-1): Tile.new(),
-	Vector2(-4,-2): Tile.new(),
-	Vector2(-4,0): Tile.new(),
-	Vector2(-5,0): Tile.new(),
-	Vector2(-5,-1): Tile.new(),
-	Vector2(-5,-2): Tile.new(),
-	Vector2(-5,-3): Tile.new(),
+	Vector2(0+10,0+10): Tile.new(),
+	Vector2(0+10,1+10): Tile.new(),
+	Vector2(0+10,2+10): Tile.new(),
+	Vector2(-1+10,2+10): Tile.new(),
+	Vector2(-2+10,2+10): Tile.new(),
+	Vector2(-3+10,0+10): Tile.new(),
+	Vector2(-1+10,0+10): Tile.new(),
+	Vector2(-2+10,1+10): Tile.new(),
+	Vector2(-2+10,0+10): Tile.new(),
+	Vector2(1+10,1+10): Tile.new(),
+	Vector2(2+10,1+10): Tile.new(), 
+	Vector2(-3+10,-1+10): Tile.new(),
+	Vector2(-3+10,-2+10): Tile.new(),
+	Vector2(-2+10,-2+10): Tile.new(),
+	Vector2(-1+10,-2+10): Tile.new(),
+	Vector2(-1+10,-1+10): Tile.new(),
+	Vector2(-4+10,-1+10): Tile.new(),
+	Vector2(-4+10,-2+10): Tile.new(),
+	Vector2(-4+10,0+10): Tile.new(),
+	Vector2(-5+10,0+10): Tile.new(),
+	Vector2(-5+10,-1+10): Tile.new(),
+	Vector2(-5+10,-2+10): Tile.new(),
+	Vector2(-5+10,-3+10): Tile.new(),
 }
 
 var entity_grid = {
-	Vector2(-2,2): preload("res://assets/Player.tscn").instance(),
-	Vector2(-2,0): Entity.new()
+	Vector2(0+10,0+10): preload("res://assets/Player.tscn").instance(),
+	Vector2(-2+10,0+10): Entity.new()
 }
 
 var obj_grid = {
-	Vector2(0,0): Pot.new(),
-	Vector2(-3,0): Pot.new()
+	Vector2(0+10,0+10): Pot.new(),
+	Vector2(-3+10,0+10): Pot.new()
 }
 
 # Each Entity/Object gets it's own assigned first value. The players is 1 so it can have 100 entries in this dict 100 particles 
@@ -65,16 +65,17 @@ func player_turn_executed():
 	emit_signal("turn_executed")
 
 func get_next(dir:Vector2, type:int, pos:Vector2):
+	var p = pos+dir
 	match type:
 		0:
-			if entity_grid.has(pos+dir):
-				return entity_grid.get(pos+dir) is Entity
+			if entity_grid.has(p):
+				return entity_grid.get(p) is Entity
 		1:
-			if obj_grid.has(pos+dir):
-				return obj_grid.get(pos+dir) is Obj
+			if obj_grid.has(p):
+				return not(obj_grid.get(p) is InteractableObj) and (obj_grid.get(p) is Obj)
 		2:
-			if tile_grid.has(pos+dir):
-				return tile_grid.get(pos+dir) is Tile
+			if tile_grid.has(p):
+				return tile_grid.get(p) is Tile
 
 func _physics_process(delta):
 	for e in entity_grid.keys():

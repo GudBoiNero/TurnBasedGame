@@ -35,6 +35,7 @@ func _unhandled_input(event):
 						move(Vector2.LEFT, 1, false)
 
 func move(dir, length, tp):
+	Game.player_pos = grid_pos
 	if can_move(dir):
 		var p = ParticleManager.new()
 		p.time = 0.8
